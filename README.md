@@ -163,3 +163,51 @@ Final Training Mean IoU: ~0.74
 Final Validation Mean IoU: ~0.64
 Final Training Loss: ~0.813
 Final Validation Loss: ~0.838**
+
+
+**Comprehensive Report on DeepLabV3+ Model
+Brain Tumor Segmentation using DeepLabV3+ with EfficientNet Backbone**
+
+1. Introduction
+Background: Discuss the importance of accurate brain tumor segmentation in medical imaging and its impact on diagnosis and treatment planning.
+Objective: To develop a deep learning model for automated brain tumor segmentation using the DeepLabV3+ architecture.
+2. Dataset
+Description: Introduce the BraTS 2020 dataset, including the types of MRI modalities used (e.g., FLAIR, T1ce).
+Preprocessing:
+Data Loading: Explain how the data was loaded and any challenges encountered.
+Normalization: Describe the normalization techniques applied to the MRI slices.
+Label Mapping: Map the original labels to a consistent set (e.g., mapping label 4 to 3).
+3. Methodology
+3.1 Model Architecture
+DeepLabV3+ Overview: Provide a detailed explanation of the DeepLabV3+ architecture, including:
+Encoder (Backbone): Use of EfficientNetB0 and its advantages.
+ASPP Module: How it captures multiscale information.
+Decoder: How it refines the segmentation output.
+3.2 Loss Function and Metrics
+Custom Dice Loss: Explain the use of Dice Loss with class weights to handle class imbalance.
+Metrics:
+Accuracy: Overall pixel-wise accuracy.
+Mean IoU: Measures the overlap between predicted and ground truth masks.
+Dice Coefficient: Provides per-class and mean overlap metrics.
+3.3 Training Details
+Data Generator: Describe how the DataGenerator was implemented to efficiently load and preprocess data during training.
+Hyperparameters:
+Batch Size: 4 patients per batch, with 5 slices per patient.
+Epochs: Trained for up to 35 epochs with early stopping.
+Optimizer: Adam optimizer with an initial learning rate of 0.001.
+Callbacks: Use of EarlyStopping, ReduceLROnPlateau, and ModelCheckpoint to improve training efficiency and save the best model.
+4. Results
+4.1 Quantitative Results
+Evaluation Metrics:
+
+Class ID	Class Name	Dice Coefficient
+0	Not Tumor	0.9981
+1	Necrotic/Core	0.6919
+2	Edema	0.7651
+3	Enhancing	0.7590
+-	Mean Dice Coefficient	0.8035
+Validation Metrics:
+
+Validation Loss: 0.0654
+Validation Accuracy: 99.45%
+Validation Mean IoU: 0.6907
