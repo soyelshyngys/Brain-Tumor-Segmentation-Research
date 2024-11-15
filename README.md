@@ -51,13 +51,13 @@ Results
 
 The model achieved the following metrics on the test set:
 Metric	Value
-Loss	0.061
+**Loss	0.061
 Accuracy	99.36%
 Dice Coefficient	0.50
 Mean IoU	0.2438
 Precision	0.997
 Sensitivity	0.989
-Specificity	0.9988
+Specificity	0.9988**
 
 Detailed per-class performance:
 
@@ -77,3 +77,89 @@ Prerequisites
     Scikit-Image
     OpenCV
     Other libraries specified in requirements.txt
+
+
+**Brain Tumor Segmentation Using U-Net with ResNet50 Backbone**
+
+Introduction
+Brain tumor segmentation is a critical task in medical image analysis, aiding in diagnosis, treatment planning, and monitoring disease progression. This project implements a deep learning approach using a U-Net architecture with a ResNet50 backbone for multi-class brain tumor segmentation.
+
+Dataset Description
+The dataset used is the BraTS2020 (Brain Tumor Segmentation) dataset, which includes multi-modal MRI scans and corresponding segmentation masks. The modalities used are:
+
+FLAIR: Fluid-attenuated inversion recovery
+T1CE: T1-weighted contrast-enhanced
+The segmentation masks classify each voxel into one of the following classes:
+
+0: Not Tumor (Background)
+1: Necrotic/Core
+2: Edema
+3: Enhancing Tumor (originally labeled as 4 in the dataset, mapped to 3)
+
+Methodology
+Data Preprocessing
+Normalization: Each MRI slice is normalized individually to handle intensity variations.
+Resizing: Images are resized to 
+128
+×
+128
+128×128 pixels for computational efficiency.
+Label Mapping: The original segmentation labels are mapped to ensure they are sequential integers starting from 0.
+Label 4 (Enhancing Tumor) is mapped to 3.
+One-Hot Encoding: Segmentation masks are one-hot encoded for multi-class segmentation.
+
+Data Generator
+A custom DataGenerator class inherits from tf.keras.utils.Sequence to efficiently load and preprocess the data on-the-fly during training. Key features:
+
+Batch Processing: Handles data in batches to optimize memory usage.
+Shuffling: Shuffles data after each epoch to improve generalization.
+Data Augmentation: (Optional) Can be extended to include data augmentation techniques.
+
+Model Architecture
+U-Net: A convolutional neural network architecture designed for biomedical image segmentation.
+Backbone: ResNet50 pretrained on ImageNet, used as the encoder part of the U-Net.
+Input Shape: 
+(
+128
+,
+128
+,
+3
+)
+(128,128,3) to match the expected input shape of ResNet50.
+The third channel is set to zeros as a placeholder due to the lack of a third modality.
+Loss Function and Metrics
+Loss Function: Dice Loss with class weights to handle class imbalance.
+Class weights: 
+[
+0.1
+,
+0.3
+,
+0.3
+,
+0.3
+]
+[0.1,0.3,0.3,0.3]
+Metrics:
+Accuracy
+Custom Mean IoU: A custom implementation compatible with one-hot encoded labels and softmax outputs.
+Training Procedure
+Optimizer: Adam with an initial learning rate of 
+0.001
+0.001.
+Callbacks:
+EarlyStopping: Monitors validation loss and stops training if no improvement after 5 epochs.
+ReduceLROnPlateau: Reduces learning rate when validation loss plateaus.
+CSVLogger: Logs training progress to a CSV file.
+Epochs: Trained for up to 35 epochs with early stopping.
+Results
+Training and Validation Metrics
+Below are the key metrics observed during training:
+
+**Final Training Accuracy: ~99.5%
+Final Validation Accuracy: ~99.3%
+Final Training Mean IoU: ~0.74
+Final Validation Mean IoU: ~0.64
+Final Training Loss: ~0.813
+Final Validation Loss: ~0.838**
